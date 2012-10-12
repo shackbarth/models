@@ -37,6 +37,7 @@ white:true*/
         settingsOptions,
         settings,
         schemaOptions,
+        localeOptions,
         callback;
 
       if (options && options.success && options.success instanceof Function) {
@@ -140,21 +141,23 @@ white:true*/
       }
 
       if (types & this.LOCALE) {
+        localeOptions = options ? _.clone(options) : {};
 
-        // TEMPORARY IMPLEMENTATION TO INTERPRET FROM SOURCE
-        if (XT.lang) {
-          XT.locale.setLanguage(XT.lang);
-        } else {
-          XT.log("XT.session.loadSessionObjects(): could not find " +
-            "a valid language to load");
-        }
+        // callback
+        localeOptions.success = function (resp) {
+          var locale = new Backbone.Model(resp);
+          that.setLocale(locale);
+          callback();
+        };
 
-        if (callback && callback instanceof Function) {
-          setTimeout(callback, 1);
-        }
+        XT.dataSource.dispatch('XT.Session', 'locale', null, localeOptions);
       }
 
       return true;
+    },
+
+    getLocale: function () {
+      return this.locale;
     },
 
     getSchema: function () {
@@ -167,6 +170,11 @@ white:true*/
 
     getPrivileges: function () {
       return this.privileges;
+    },
+
+    setLocale: function (value) {
+      this.locale = value;
+      return this;
     },
 
     setSchema: function (value) {
