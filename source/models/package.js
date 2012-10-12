@@ -3,6 +3,8 @@ enyo.depends(
   "address.js",
   "contact.js",
   "currency.js",
+  "customer.js",
+  "employee.js",
   "file.js",
   "image.js",
   "incident.js",
