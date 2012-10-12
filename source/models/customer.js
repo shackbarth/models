@@ -178,6 +178,48 @@ white:true*/
     descriptionKey: "name"
 
   });
+  
+  /**
+    @class
+
+    @extends XM.Model
+  */
+  XM.ShipCharge = XM.Document.extend({
+    /** @scope XM.CustomerCharge.prototype */
+
+    recordType: 'XM.ShipCharge',
+    
+    documentKey: 'name'
+
+  });
+  
+  /**
+    @class
+
+    @extends XM.Model
+  */
+  XM.ShipVia = XM.Document.extend({
+    /** @scope XM.CustomerVia.prototype */
+
+    recordType: 'XM.ShipVia',
+    
+    documentKey: 'code'
+
+  });
+  
+  /**
+    @class
+
+    @extends XM.Model
+  */
+  XM.ShipZone = XM.Document.extend({
+    /** @scope XM.ShipZone.prototype */
+
+    recordType: 'XM.ShipZone',
+    
+    documentKey: 'name'
+
+  });
 
   // ..........................................................
   // COLLECTIONS
