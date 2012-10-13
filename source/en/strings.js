@@ -15,9 +15,35 @@ XT.stringsFor("en_US", {
 
   "_assigned": "Assigned",
   "_closed": "Closed",
+  "_completed": "Completed",
+  "_concept": "Concept",
   "_confirmed": "Confirmed",
   "_feedback": "Feedback",
-  "_resolved": "Resolved"
+  "_individual": "Individual",
+  "_inProcess": "In Process",
+  "_organization": "Organization",
+  "_resolved": "Resolved",
+  
+  // ********
+  // Messages
+  // ********
+  
+  "_assignedToRequiredAssigned": "Assigned to is required when status is 'Assigned'",
+  "_attributeIsRequired": "{attr} is required.",
+  "_attributeTypeMismatch": "The value of '{attr}' must be type: {type}.",
+  "_attributeNotInSchema": "'{attr}' does not exist in the schema.",
+  "_attributeReadOnly": "Can not edit read only attribute(s).",
+  "_characteristicContextRequired": "You must set at least one characteristic context to true.",
+  "_datasourceError": "Data source error: {error}",
+  "_duplicateValues": "Duplicate values are not allowed.",
+  "_lengthInvalid": "Length of {attr} must be {length}.",
+  "_nameRequired": "A name is required.",
+  "_productCategoryRequiredOnSold": "A Product Category is required for sold items.",
+  "_recursiveParentDisallowed": "Record is not allowed to reference itself as the parent.",
+  "_recordNotFound": "Record not found.",
+  "_recordStatusNotEditable": "Record with status of `{status}` is not editable.",
+  "_valueExists": "Record with {attr} of '{value}' already exists.",
+  "_whatToDo": "What would you like to do?"
   
 });
 
