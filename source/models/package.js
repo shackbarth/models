@@ -13,7 +13,8 @@ enyo.depends(
   "priority.js",
   "project.js",
   "sales_rep.js",
-  "tax_authority.js",
+  "tax.js",
+  "terms.js",
   "to_do.js",
   "url.js",
   "user_account.js"
