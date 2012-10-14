@@ -21,6 +21,7 @@ XT.stringsFor("en_US", {
   "_feedback": "Feedback",
   "_individual": "Individual",
   "_inProcess": "In Process",
+  "_new": "New",
   "_organization": "Organization",
   "_resolved": "Resolved",
   
