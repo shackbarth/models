@@ -225,7 +225,7 @@ white:true*/
     @extends XM.Info
   */
   XM.AccountRelation = XM.Info.extend({
-    /** @scope XM.ContactRelation.prototype */
+    /** @scope XM.AccountRelation.prototype */
 
     recordType: 'XM.AccountRelation',
 
@@ -252,18 +252,6 @@ white:true*/
   // ..........................................................
   // COLLECTIONS
   //
-
-  /**
-    @class
-
-    @extends XM.Collection
-  */
-  XM.AccountContactInfoCollection = XM.Collection.extend({
-    /** @scope XM.AccountContactInfoCollection.prototype */
-
-    model: XM.AccountContactInfo
-
-  });
 
   /**
     @class

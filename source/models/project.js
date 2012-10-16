@@ -314,6 +314,8 @@ white:true*/
     /** @scope XM.ProjectTask.prototype */
 
     recordType: 'XM.ProjectTask',
+    
+    enforceUpperKey: false,
 
     defaults: function () {
       var result = XM.ProjectBase.prototype.defaults.call(this);

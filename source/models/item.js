@@ -281,7 +281,7 @@ white:true*/
   XM.ItemRelation = XM.Info.extend({
     /** @scope XM.ItemRelatino.prototype */
 
-    recordType: 'XM.ItemInfo',
+    recordType: 'XM.ItemRelation',
 
     editableModel: 'XM.Item',
     
