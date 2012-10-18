@@ -1,3 +1,8 @@
+/*jshint indent:2, curly:true eqeqeq:true, immed:true, latedef:true, 
+newcap:true, noarg:true, regexp:true, undef:true, strict:true, trailing:true
+white:true*/
+/*global XT:true, _:true, console:true, X:true, Backbone:true, require:true */
+
 (function () {
 
   // native
@@ -404,7 +409,7 @@
       // DEPENDENCIES
       DOCUMENT_HOSTNAME = "";
       [
-        "foundation",
+        "core",
         "error",
         "log",
         "datasource",
@@ -415,11 +420,10 @@
         "locale",
         "ext/proto/string",
         "ext/string",
-        "ext/startup_task",
-        "en/strings"
+        "ext/startup_task"
       ].map(function (path) {
         "use strict";
-        return _path.join(X.basePath, "../xt", path) + ".js";
+        return _path.join(X.basePath, "lib/tools/source", path) + ".js";
       }).forEach(function (path) {
         "use strict";
         require(path);
@@ -477,10 +481,10 @@
       // FROM THE package.js FILE IN MODELS
       enyo.relativePath = _path.join(X.basePath, "../xm/models");
       require(_path.join(X.basePath, "../xm/models", "package.js"));
-      require(_path.join(X.basePath, "../ext/crm", "core.js"));
+      //require(_path.join(X.basePath, "../ext/crm", "core.js"));
       // GRAB THE CRM MODULE
-      enyo.relativePath = _path.join(X.basePath, "../ext/crm/xm/models");
-      require(_path.join(X.basePath, "../ext/crm/xm/models", "package.js"));
+      //enyo.relativePath = _path.join(X.basePath, "../ext/crm/xm/models");
+      //require(_path.join(X.basePath, "../ext/crm/xm/models", "package.js"));
       // GRAB THE STARTUP TASKS
       require(_path.join(X.basePath, "../xm", "startup.js"));
 

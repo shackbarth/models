@@ -2,7 +2,7 @@
 
   // we are going to rely on the node-xt framework for access
   // to certain tools and convenience mechanisms
-  require("../../../node-xt");
+  require("xt");
 
   // setup the framework to use only what we need...
   X.setup({
