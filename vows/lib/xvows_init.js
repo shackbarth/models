@@ -83,8 +83,22 @@ white:true*/
     begin: function () {
       "use strict";
       
-      if (currentState = LOADING_SESSION) {
-        currentState = LOADING_APP_DATA;
+      if (currentState === LOADING_SESSION) {
+        this.console('done loading session');
+        currentState = LOADING_SCHEMA;
+        XT.StartupTask.create({
+          taskName: "loadSessionSchema",
+          task: function () {
+            var options = {
+              success: _.bind(this.didComplete, this)
+            };
+            XT.session.loadSessionObjects(XT.session.SCHEMA, options);
+          }
+        });
+        XT.getStartupManager().registerCallback(_.bind(XVOWS.begin, XVOWS));
+      } else if (currentState === LOADING_SCHEMA) {
+          this.console('done loading schema');
+          currentState = LOADING_APP_DATA;
         // RUN STARTUP TASKS THAT WERE JUST CACHED
         _.each(XT.StartupTasks, function (task) {
           XT.StartupTask.create(task);
