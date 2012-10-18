@@ -50,6 +50,15 @@ white:true*/
   }());
 
   var sessionCache, userCache, K, sid, k, user, username, organization, details, tmp;
+  
+  // COPIED FROM app.js in client application
+  var UNINITIALIZED = 0;
+  var LOADING_SESSION = 1;
+  var LOADING_EXTENSIONS = 2;
+  var LOADING_SCHEMA = 3;
+  var LOADING_APP_DATA = 4;
+  var RUNNING = 5;
+  var currentState = UNINITIALIZED;
 
   // namespace for the test suite
   XVOWS = X.Object.create({
@@ -73,27 +82,36 @@ white:true*/
 
     begin: function () {
       "use strict";
-      this.console("all startup tasks completed");
-      this.console("searching for available tests");
-      this.findAllTests();
-      this.console("found %@ total".f((Object.keys(this.tests)).length));
-
-      // were there special requests from the command line
-
-      if (this.args.length === 1 && this.args[0] === "*") {
-        // running all available tests
-      } else if (this.args.length >= 1) {
-        this.args.map(_.bind(function (file) {
-          return _path.extname(file) === ".js" ? file: file + ".js";
-        }, this)).forEach(_.bind(function (file) {
-          this.addTest(file);
-        }, this));
+      
+      if (currentState = LOADING_SESSION) {
+        currentState = LOADING_APP_DATA;
+        // RUN STARTUP TASKS THAT WERE JUST CACHED
+        _.each(XT.StartupTasks, function (task) {
+          XT.StartupTask.create(task);
+        }); 
       } else {
-        throw new Error("cannot figure out what to do");
-      }
+        this.console("all startup tasks completed");
+        this.console("searching for available tests");
+        this.findAllTests();
+        this.console("found %@ total".f((Object.keys(this.tests)).length));
 
-      // start testing
-      this.start();
+        // were there special requests from the command line
+
+        if (this.args.length === 1 && this.args[0] === "*") {
+          // running all available tests
+        } else if (this.args.length >= 1) {
+          this.args.map(_.bind(function (file) {
+            return _path.extname(file) === ".js" ? file: file + ".js";
+          }, this)).forEach(_.bind(function (file) {
+            this.addTest(file);
+          }, this));
+        } else {
+          throw new Error("cannot figure out what to do");
+        }
+
+        // start testing
+        this.start();
+      }
     },
 
     addTest: function (file) {
@@ -409,7 +427,7 @@ white:true*/
       // DEPENDENCIES
       DOCUMENT_HOSTNAME = "";
       [
-        "core",
+        "foundation",
         "error",
         "log",
         "datasource",
@@ -465,29 +483,36 @@ white:true*/
       // INCLUDE ALL THE NECESSARY XM FRAMEWORK
       // DEPENDENCIES
       //
-      // HANEOUS ABOMINATION TO KEEP BACKBONE-
-      // RELATIONAL FROM BOMBING...
-      Backbone.XM = XM;
+     
       // LOAD ALL MODELS
       //
       // TO PRESERVE LOAD ORDER WE HACK THIS INTO
       // UGLY OBLIVION BUT BY GOLLY IT F*@&$@# WORKS
       require("./enyo_placeholder");
-      enyo.relativePath = _path.join(X.basePath, "../xm/ext");
-      require(_path.join(X.basePath, "../xm/ext/package.js"));
-      //require(_path.join(X.basePath, "../xm/ext", "model.js"));
-      //require(_path.join(X.basePath, "../xm/ext", "collection.js"));
+
+      enyo.relativePath = _path.join(X.basePath, "lib/backbone-x/source");
+      require(_path.join(X.basePath, "lib/backbone-x/source/package.js"));
+      require(_path.join(X.basePath, "lib/backbone-x/source", "core.js"));
+      require(_path.join(X.basePath, "lib/backbone-x/source", "model.js"));
+      require(_path.join(X.basePath, "lib/backbone-x/source", "collection.js"));
       // GRAB THE LOAD ORDER WE WANT TO PRESERVE
       // FROM THE package.js FILE IN MODELS
-      enyo.relativePath = _path.join(X.basePath, "../xm/models");
-      require(_path.join(X.basePath, "../xm/models", "package.js"));
+      enyo.relativePath = _path.join(X.basePath, "../source/models");
+      require(_path.join(X.basePath, "../source/models", "package.js"));
+      require(_path.join(X.basePath, "../source/ext", "core.js"));
+      require(_path.join(X.basePath, "../source/ext", "session.js"));
       //require(_path.join(X.basePath, "../ext/crm", "core.js"));
       // GRAB THE CRM MODULE
       //enyo.relativePath = _path.join(X.basePath, "../ext/crm/xm/models");
       //require(_path.join(X.basePath, "../ext/crm/xm/models", "package.js"));
       // GRAB THE STARTUP TASKS
-      require(_path.join(X.basePath, "../xm", "startup.js"));
-
+      var currentState = LOADING_SESSION;
+      require(_path.join(X.basePath, "../source", "startup.js"));
+ 
+      // HANEOUS ABOMINATION TO KEEP BACKBONE-
+      // RELATIONAL FROM BOMBING...
+      Backbone.XM = XM; 
+      
       // PROCESS ANY INCOMING ARGS REAL QUICK
       (function () {
         "use strict";
