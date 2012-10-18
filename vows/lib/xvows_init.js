@@ -88,6 +88,25 @@ white:true*/
         
       // This whole startup thing is terrible....
       if (currentState === LOADING_SESSION) {
+        // Treating this like other progressive actions because we assume
+        // in the future extensions will be loaded from the server
+        currentState = LOADING_EXTENSIONS;
+        this.console('loading extensions');
+        for (prop in XT.extensions) {
+          if (XT.extensions.hasOwnProperty(prop)) {
+            ext = XT.extensions[prop];
+            for (extprop in ext) {
+              if (ext.hasOwnProperty(extprop) &&
+                  typeof ext[extprop] === "function") {
+                //XT.log('Installing ' + prop + ' ' + extprop);
+                ext[extprop]();
+              }
+            }
+          }
+        }
+        this.begin();
+      } else if (currentState === LOADING_EXTENSIONS) {
+        this.console('loading schema');
         options.success = function () {
           that.begin();
         }
@@ -99,7 +118,8 @@ white:true*/
           }
         });
       } else if (currentState === LOADING_SCHEMA) {
-          currentState = LOADING_APP_DATA;
+        this.console('loading app. data');
+        currentState = LOADING_APP_DATA;
         // RUN STARTUP TASKS THAT WERE JUST CACHED
         len = XT.StartupTasks.length;
         _.each(XT.StartupTasks, function (task) {
@@ -353,10 +373,14 @@ white:true*/
       require(_path.join(X.basePath, "../source/models", "package.js"));
       require(_path.join(X.basePath, "../source/ext", "core.js"));
       require(_path.join(X.basePath, "../source/ext", "session.js"));
-      //require(_path.join(X.basePath, "../ext/crm", "core.js"));
       // GRAB THE CRM MODULE
-      //enyo.relativePath = _path.join(X.basePath, "../ext/crm/xm/models");
-      //require(_path.join(X.basePath, "../ext/crm/xm/models", "package.js"));
+      require(_path.join(X.basePath, "../../client/source/ext/crm", "core.js"));
+      enyo.relativePath = _path.join(X.basePath, "../../client/source/ext/crm/models");
+      require(_path.join(X.basePath, "../../client/source/ext/crm/models", "package.js"));
+      // GRAB THE PROJECT MODULE
+      require(_path.join(X.basePath, "../../client/source/ext/project", "core.js"));
+      enyo.relativePath = _path.join(X.basePath, "../../client/source/ext/project/models");
+      require(_path.join(X.basePath, "../../client/source/ext/project/models", "package.js"));
       // GRAB THE STARTUP TASKS
       require(_path.join(X.basePath, "../source", "startup.js"));
  
