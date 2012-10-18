@@ -58,7 +58,7 @@ white:true*/
   var LOADING_SCHEMA = 3;
   var LOADING_APP_DATA = 4;
   var RUNNING = 5;
-  var currentState = UNINITIALIZED;
+  var currentState = LOADING_SESSION;
 
   // namespace for the test suite
   XVOWS = X.Object.create({
@@ -81,28 +81,35 @@ white:true*/
     },
 
     begin: function () {
-      "use strict";
-      
+      var options = {},
+        that = this,
+        cnt = 0,
+        len = 0;
+      this.console('state', currentState);
       if (currentState === LOADING_SESSION) {
         this.console('done loading session');
+        options.success = function () {
+          that.begin();
+        }
         currentState = LOADING_SCHEMA;
         XT.StartupTask.create({
           taskName: "loadSessionSchema",
           task: function () {
-            var options = {
-              success: _.bind(this.didComplete, this)
-            };
             XT.session.loadSessionObjects(XT.session.SCHEMA, options);
           }
         });
-        XT.getStartupManager().registerCallback(_.bind(XVOWS.begin, XVOWS));
       } else if (currentState === LOADING_SCHEMA) {
           this.console('done loading schema');
           currentState = LOADING_APP_DATA;
         // RUN STARTUP TASKS THAT WERE JUST CACHED
+        len = XT.StartupTasks.length;
         _.each(XT.StartupTasks, function (task) {
           XT.StartupTask.create(task);
         }); 
+        XT.getStartupManager().registerCallback(function () { 
+          cnt++;
+          if (cnt >= len) { that.begin(); } 
+        }, true);
       } else {
         this.console("all startup tasks completed");
         this.console("searching for available tests");
@@ -520,7 +527,6 @@ white:true*/
       //enyo.relativePath = _path.join(X.basePath, "../ext/crm/xm/models");
       //require(_path.join(X.basePath, "../ext/crm/xm/models", "package.js"));
       // GRAB THE STARTUP TASKS
-      var currentState = LOADING_SESSION;
       require(_path.join(X.basePath, "../source", "startup.js"));
  
       // HANEOUS ABOMINATION TO KEEP BACKBONE-
