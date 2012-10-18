@@ -1,3 +1,8 @@
+/*jshint indent:2, curly:true eqeqeq:true, immed:true, latedef:true, 
+newcap:true, noarg:true, regexp:true, undef:true, strict:true, trailing:true
+white:true*/
+/*global XT:true, _:true, console:true, X:true, Backbone:true, require:true */
+
 (function () {
 
   // native
@@ -45,6 +50,15 @@
   }());
 
   var sessionCache, userCache, K, sid, k, user, username, organization, details, tmp;
+  
+  // COPIED FROM app.js in client application
+  var UNINITIALIZED = 0;
+  var LOADING_SESSION = 1;
+  var LOADING_EXTENSIONS = 2;
+  var LOADING_SCHEMA = 3;
+  var LOADING_APP_DATA = 4;
+  var RUNNING = 5;
+  var currentState = LOADING_SESSION;
 
   // namespace for the test suite
   XVOWS = X.Object.create({
@@ -67,28 +81,77 @@
     },
 
     begin: function () {
-      "use strict";
-      this.console("all startup tasks completed");
-      this.console("searching for available tests");
-      this.findAllTests();
-      this.console("found %@ total".f((Object.keys(this.tests)).length));
-
-      // were there special requests from the command line
-
-      if (this.args.length === 1 && this.args[0] === "*") {
-        // running all available tests
-      } else if (this.args.length >= 1) {
-        this.args.map(_.bind(function (file) {
-          return _path.extname(file) === ".js" ? file: file + ".js";
-        }, this)).forEach(_.bind(function (file) {
-          this.addTest(file);
-        }, this));
+      var options = {},
+        that = this,
+        cnt = 0,
+        len = 0;
+        
+      // This whole startup thing is terrible....
+      if (currentState === LOADING_SESSION) {
+        // Treating this like other progressive actions because we assume
+        // in the future extensions will be loaded from the server
+        currentState = LOADING_EXTENSIONS;
+        this.console('loading extensions');
+        for (prop in XT.extensions) {
+          if (XT.extensions.hasOwnProperty(prop)) {
+            ext = XT.extensions[prop];
+            for (extprop in ext) {
+              if (ext.hasOwnProperty(extprop) &&
+                  typeof ext[extprop] === "function") {
+                //XT.log('Installing ' + prop + ' ' + extprop);
+                ext[extprop]();
+              }
+            }
+          }
+        }
+        this.begin();
+      } else if (currentState === LOADING_EXTENSIONS) {
+        this.console('loading schema');
+        options.success = function () {
+          that.begin();
+        }
+        currentState = LOADING_SCHEMA;
+        XT.StartupTask.create({
+          taskName: "loadSessionSchema",
+          task: function () {
+            XT.session.loadSessionObjects(XT.session.SCHEMA, options);
+          }
+        });
+      } else if (currentState === LOADING_SCHEMA) {
+        this.console('loading app. data');
+        currentState = LOADING_APP_DATA;
+        // RUN STARTUP TASKS THAT WERE JUST CACHED
+        len = XT.StartupTasks.length;
+        _.each(XT.StartupTasks, function (task) {
+          XT.StartupTask.create(task);
+        }); 
+        XT.getStartupManager().registerCallback(function () { 
+          cnt++;
+          if (cnt >= len) { that.begin(); } 
+        }, true);
       } else {
-        throw new Error("cannot figure out what to do");
-      }
+        this.console("all startup tasks completed");
+        this.console("searching for available tests");
+        this.findAllTests();
+        this.console("found %@ total".f((Object.keys(this.tests)).length));
 
-      // start testing
-      this.start();
+        // were there special requests from the command line
+
+        if (this.args.length === 1 && this.args[0] === "*") {
+          // running all available tests
+        } else if (this.args.length >= 1) {
+          this.args.map(_.bind(function (file) {
+            return _path.extname(file) === ".js" ? file: file + ".js";
+          }, this)).forEach(_.bind(function (file) {
+            this.addTest(file);
+          }, this));
+        } else {
+          throw new Error("cannot figure out what to do");
+        }
+
+        // start testing
+        this.start();
+      }
     },
 
     addTest: function (file) {
@@ -183,175 +246,7 @@
       } else { this.finish(); }
     },
 
-    nexted: null,
-
-    /**
-      Creates a working model and automatically checks state
-      is `READY_NEW` and a valid `id` immediately afterward.
-
-      Note: This function assumes the `id` is fetched automatically.
-      For models with manually created ids such as 'XM.UserAccount',
-      create a topic manually.
-
-      @param {String|Object} Model
-      @param {Object} Vows
-    */
-    create: function (model, vows) {
-      "use strict";
-      vows = vows || {};
-      var context = {
-        topic: function () {
-          var that = this,
-            timeoutId,
-            Klass,
-            auto_regex = XM.Document.AUTO_NUMBER + "|" + XM.Document.AUTO_OVERRIDE_NUMBER,
-            callback = function (model, value) {
-              if (model instanceof XM.Document && model.numberPolicy.match(auto_regex)) {
-                // Check that the AUTO...NUMBER property has been set.
-                if (model.get(model.documentKey) && model.id) {
-                  clearTimeout(timeoutId);
-                  model.off('change:' + model.documentKey, callback);
-                  model.off('change:id', callback);
-                  that.callback(null, model);
-                }
-              } else {
-                clearTimeout(timeoutId);
-                model.off('change:id', callback);
-                that.callback(null, model);
-              }
-            };
-
-          if (typeof model === 'string') {
-            Klass = Backbone.Relational.store.getObjectByName(model);
-            model = new Klass();
-          }
-          model.on('change:id', callback);
-          // Add an event handler when using a model with an AUTO...NUMBER.
-          if (model instanceof XM.Document && model.numberPolicy.match(auto_regex)) {
-            model.on('change:' + model.documentKey, callback);
-          }
-          model.initialize(null, {isNew: true});
-
-          // If we don't hear back, keep going
-          timeoutId = setTimeout(function () {
-            that.callback(null, model);
-          }, XVOWS.wait);
-        },
-        'Status is `READY_NEW`': function (model) {
-          assert.equal(model.getStatusString(), 'READY_NEW');
-        },
-        'ID is valid': function (model) {
-          assert.isNumber(model.id);
-        }
-      };
-
-      // Add in any other passed vows
-      _.extend(context, vows);
-      return context;
-    },
-
-    /**
-      Saves the working model and automatically checks state
-      is `READY_CLEAN` immediately afterward.
-
-      @param {String|Object} Model
-      @param {Object} Vows
-    */
-    save: function (model, vows) {
-      "use strict";
-      vows = vows || {};
-      var context = {
-        topic: function () {
-          var that = this,
-            timeoutId,
-            callback = function () {
-              var status = model.getStatus(),
-                K = XM.Model;
-              if (status === K.READY_CLEAN) {
-                clearTimeout(timeoutId);
-                model.off('statusChange', callback);
-                that.callback(null, model);
-              }
-            };
-          model.on('statusChange', callback);
-          model.save();
-
-          // If we don't hear back, keep going
-          timeoutId = setTimeout(function () {
-            that.callback(null, model);
-          }, XVOWS.wait);
-        },
-        'Status is `READY_CLEAN`': function (model) {
-          assert.equal(model.getStatusString(), 'READY_CLEAN');
-        }
-      };
-
-      // Add in any other passed vows
-      _.extend(context, vows);
-      return context;
-    },
-
-    /**
-      Check before updating the working model that the state is `READY_CLEAN`.
-
-      @param {String|Object} Model
-      @param {Object} Vows
-    */
-    update: function (model, vows) {
-      "use strict";
-      vows = vows || {};
-      var context = {
-        topic: function () {
-          return model;
-        },
-        'Status is `READY_CLEAN`': function (model) {
-          assert.equal(model.getStatusString(), 'READY_CLEAN');
-        }
-      };
-
-      // Add in any other passed vows
-      _.extend(context, vows);
-      return context;
-    },
-
-    /**
-      Destorys the working model and automatically checks state
-      is `DESTROYED_CLEAN` immediately afterward.
-
-      @param {Object} Vows
-    */
-    destroy: function (model, vows, obj) {
-      "use strict";
-      vows = vows || {};
-      var context = {
-        topic: function () {
-          var that = this,
-            timeoutId,
-            callback = function () {
-              var status = model.getStatus(),
-                K = XM.Model;
-              if (status === K.DESTROYED_CLEAN) {
-                clearTimeout(timeoutId);
-                model.off('statusChange', callback);
-                that.callback(null, model);
-              }
-            };
-          model.on('statusChange', callback);
-          model.destroy();
-
-          // If we don't hear back, keep going
-          timeoutId = setTimeout(function () {
-            that.callback(null, model);
-          }, XVOWS.wait);
-        },
-        'Status is `DESTROYED_CLEAN`': function (model) {
-          assert.equal(model.getStatusString(), 'DESTROYED_CLEAN');
-        }
-      };
-      // Add in any other passed vows
-      _.extend(context, vows);
-      return context;
-    }
+    nexted: null
   });
 
   user = program.user;
@@ -415,11 +310,10 @@
         "locale",
         "ext/proto/string",
         "ext/string",
-        "ext/startup_task",
-        "en/strings"
+        "ext/startup_task"
       ].map(function (path) {
         "use strict";
-        return _path.join(X.basePath, "../xt", path) + ".js";
+        return _path.join(X.basePath, "lib/tools/source", path) + ".js";
       }).forEach(function (path) {
         "use strict";
         require(path);
@@ -461,29 +355,41 @@
       // INCLUDE ALL THE NECESSARY XM FRAMEWORK
       // DEPENDENCIES
       //
-      // HANEOUS ABOMINATION TO KEEP BACKBONE-
-      // RELATIONAL FROM BOMBING...
-      Backbone.XM = XM;
+     
       // LOAD ALL MODELS
       //
       // TO PRESERVE LOAD ORDER WE HACK THIS INTO
       // UGLY OBLIVION BUT BY GOLLY IT F*@&$@# WORKS
       require("./enyo_placeholder");
-      enyo.relativePath = _path.join(X.basePath, "../xm/ext");
-      require(_path.join(X.basePath, "../xm/ext/package.js"));
-      //require(_path.join(X.basePath, "../xm/ext", "model.js"));
-      //require(_path.join(X.basePath, "../xm/ext", "collection.js"));
+
+      enyo.relativePath = _path.join(X.basePath, "lib/backbone-x/source");
+      require(_path.join(X.basePath, "lib/backbone-x/source/package.js"));
+      require(_path.join(X.basePath, "lib/backbone-x/source", "core.js"));
+      require(_path.join(X.basePath, "lib/backbone-x/source", "model.js"));
+      require(_path.join(X.basePath, "lib/backbone-x/source", "collection.js"));
       // GRAB THE LOAD ORDER WE WANT TO PRESERVE
       // FROM THE package.js FILE IN MODELS
-      enyo.relativePath = _path.join(X.basePath, "../xm/models");
-      require(_path.join(X.basePath, "../xm/models", "package.js"));
-      require(_path.join(X.basePath, "../ext/crm", "core.js"));
+      enyo.relativePath = _path.join(X.basePath, "../source/models");
+      require(_path.join(X.basePath, "../source/models", "package.js"));
+      require(_path.join(X.basePath, "../source/ext", "core.js"));
+      require(_path.join(X.basePath, "../source/ext", "session.js"));
       // GRAB THE CRM MODULE
-      enyo.relativePath = _path.join(X.basePath, "../ext/crm/xm/models");
-      require(_path.join(X.basePath, "../ext/crm/xm/models", "package.js"));
+      require(_path.join(X.basePath, "../../client/source/ext/crm", "core.js"));
+      enyo.relativePath = _path.join(X.basePath, "../../client/source/ext/crm/models");
+      require(_path.join(X.basePath, "../../client/source/ext/crm/models", "package.js"));
+      // GRAB THE PROJECT MODULE
+      require(_path.join(X.basePath, "../../client/source/ext/project", "core.js"));
+      enyo.relativePath = _path.join(X.basePath, "../../client/source/ext/project/models");
+      require(_path.join(X.basePath, "../../client/source/ext/project/models", "package.js"));
       // GRAB THE STARTUP TASKS
-      require(_path.join(X.basePath, "../xm", "startup.js"));
-
+      require(_path.join(X.basePath, "../source", "startup.js"));
+ 
+      // HANEOUS ABOMINATION TO KEEP BACKBONE-
+      // RELATIONAL FROM BOMBING...
+      Backbone.XM = XM; 
+      
+      require(_path.join(X.basePath, "lib/crud.js"));
+      
       // PROCESS ANY INCOMING ARGS REAL QUICK
       (function () {
         "use strict";
