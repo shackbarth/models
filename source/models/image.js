@@ -14,7 +14,9 @@ white:true*/
   XM.Image = XM.Model.extend({
     /** @scope XM.Image.prototype */
 
-    recordType: 'XM.Image'
+    recordType: 'XM.Image',
+
+    binaryField: 'data' // see issue 18661
 
   });
 
