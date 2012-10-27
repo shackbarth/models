@@ -248,10 +248,34 @@ white:true*/
     editableModel: 'XM.Account'
 
   });
+  
+  /**
+    @class
+
+    @extends XM.Model
+  */
+  XM.AccountAddressListItem = XM.Model.extend({
+    /** @scope XM.AccountAddressListItem.prototype */
+
+    recordType: 'XM.AccountAddressListItem'
+
+  });
 
   // ..........................................................
   // COLLECTIONS
   //
+  
+  /**
+    @class
+
+    @extends XM.Collection
+  */
+  XM.AccountAddressListItemCollection = XM.Collection.extend({
+    /** @scope XM.AccountAddressListItemCollection.prototype */
+
+    model: XM.AccountAddressListItem
+
+  });
 
   /**
     @class
