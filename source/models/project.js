@@ -74,13 +74,13 @@ white:true*/
     initialize: function () {
       XM.Document.prototype.initialize.apply(this, arguments);
       this.on('change:status', this.projectStatusDidChange);
+      this.statusDidChange();
     },
 
     statusDidChange: function () {
-      var K = XM.Model;
-      if (this.getStatus() === K.READY_CLEAN) {
-        this.setReadOnly('number');
-      }
+      var K = XM.Model,
+        isReadOnly = this.getStatus() !== K.READY_NEW;
+      this.setReadOnly('number', isReadOnly);
     },
 
     /**
