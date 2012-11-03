@@ -151,19 +151,26 @@ white:true*/
     enforceUpperKey: false,
 
     defaults: {
-      disableExport: false,
-      isDatabaseUser: false
+      isActive: true,
+      disableExport: false
     },
 
     requiredAttributes: [
-      "disableExport",
-      "isDatabaseUser"
+      "disableExport"
     ],
 
     initialize: function (attributes, options) {
       XM.Document.prototype.initialize.apply(this, arguments);
       this.on('statusChange', this.statusChanged);
+      this.on('change:username', this.usernameChanged);
       this.statusChanged();
+    },
+    
+    usernameChanged: function () {
+      var username = this.get('username');
+      if (username) {
+        this.set('username', username.toLowerCase());
+      }
     },
 
     /**
