@@ -78,12 +78,7 @@ white:true*/
 
         // callback
         settingsOptions.success = function (resp) {
-          settings = new Backbone.Model();
-
-          // Loop through the response and set a setting for each found
-          resp.forEach(function (item) {
-            settings.set(item.setting, item.value);
-          });
+          settings = new Backbone.Model(resp);
 
           // Attach the settings to the session object
           that.setSettings(settings);

@@ -14,13 +14,18 @@
 XT.stringsFor("en_US", {
 
   "_assigned": "Assigned",
+  "_automatic": "Automatic",
+  "_automaticOverride": "Override Allowed",
   "_closed": "Closed",
   "_completed": "Completed",
   "_concept": "Concept",
   "_confirmed": "Confirmed",
+  "_database": "Database",
   "_feedback": "Feedback",
   "_individual": "Individual",
+  "_information": "Information",
   "_inProcess": "In Process",
+  "_manual": "Manual",
   "_new": "New",
   "_organization": "Organization",
   "_resolved": "Resolved",
