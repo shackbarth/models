@@ -16,7 +16,12 @@ white:true*/
 
     recordType: 'XM.DatabaseInformation',
     
-    privileges: 'ConfigDatabaseInfo'
+    privileges: 'ConfigDatabaseInfo',
+    
+    readOnlyAttributes: [
+      "DatabaseName",
+      "ServerVersion"
+    ]
 
   });
   
