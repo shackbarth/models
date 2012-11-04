@@ -19,5 +19,7 @@ white:true*/
     privileges: 'ConfigDatabaseInfo'
 
   });
+  
+  XM.databaseInformation = new XM.DatabaseInformation();
 
 }());
