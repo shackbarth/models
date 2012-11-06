@@ -131,7 +131,7 @@ white:true*/
         return '_closed'.loc();
       }
     },
-    
+
     isActive: function () {
       var K = XM.Incident,
         status = this.get('status');
@@ -167,7 +167,8 @@ white:true*/
       "account",
       "category",
       "contact",
-      "description"
+      "description",
+      "status"
     ],
 
     // ..........................................................
@@ -273,7 +274,7 @@ white:true*/
     /** @scope XM.IncidentComment.prototype */
 
     recordType: 'XM.IncidentComment',
-    
+
     sourceName: 'INCDT'
 
   });
@@ -423,7 +424,7 @@ white:true*/
     recordType: 'XM.IncidentRecurrence'
 
   });
-  
+
   /**
     @class
 
@@ -431,13 +432,13 @@ white:true*/
   */
   XM.IncidentRelation = XM.Info.extend({
     /** @scope XM.IncidentRelation.prototype */
-    
+
     recordType: 'XM.IncidentRelation',
 
     editableModel: 'XM.Incident'
 
   });
-  
+
   // Incident status mixin
   XM.IncidentRelation = XM.IncidentRelation.extend(XM.IncidentStatus);
 
@@ -448,7 +449,7 @@ white:true*/
   */
   XM.IncidentListItem = XM.Info.extend({
     /** @scope XM.IncidentListItem.prototype */
-    
+
     recordType: 'XM.IncidentListItem',
 
     editableModel: 'XM.Incident'
@@ -509,7 +510,7 @@ white:true*/
     model: XM.IncidentListItem
 
   });
-  
+
   /**
     @class
 
