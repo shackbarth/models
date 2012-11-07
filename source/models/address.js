@@ -272,10 +272,10 @@ white:true*/
 
     recordType: 'XM.Country',
 
-    documentKey: "name",
+    documentKey: "abbreviation",
 
     requiredAttributes: [
-      "abbreviation",
+      "name",
       "currencyAbbreviation",
       "name"
     ],
