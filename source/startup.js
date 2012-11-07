@@ -94,6 +94,10 @@ white:true*/
       var options = {
         success: _.bind(this.didComplete, this)
       };
+      options.query = {};
+      options.query.orderBy = [
+        {attribute: 'name'}
+      ];
       XM.characteristics = new XM.CharacteristicCollection();
       XM.characteristics.fetch(options);
     }
