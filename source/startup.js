@@ -96,6 +96,7 @@ white:true*/
       };
       options.query = {};
       options.query.orderBy = [
+        {attribute: 'order'},
         {attribute: 'name'}
       ];
       XM.characteristics = new XM.CharacteristicCollection();
