@@ -92,7 +92,13 @@ white:true*/
     taskName: "loadCharacteristics",
     task: function () {
       var options = {
-        success: _.bind(this.didComplete, this)
+        success: _.bind(this.didComplete, this),
+        query: {
+          orderBy: [
+            {attribute: 'order'},
+            {attribute: 'name'}
+          ]
+        }
       };
       XM.characteristics = new XM.CharacteristicCollection();
       XM.characteristics.fetch(options);
