@@ -92,7 +92,13 @@ white:true*/
     taskName: "loadCharacteristics",
     task: function () {
       var options = {
-        success: _.bind(this.didComplete, this)
+        success: _.bind(this.didComplete, this),
+        query: {
+          orderBy: [
+            {attribute: 'order'},
+            {attribute: 'name'}
+          ]
+        }
       };
       options.query = {};
       options.query.orderBy = [
