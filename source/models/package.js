@@ -7,7 +7,6 @@ enyo.depends(
   "customer.js",
   "employee.js",
   "file.js",
-  "image.js",
   "incident.js",
   "item.js",
   "opportunity.js",
