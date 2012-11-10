@@ -380,7 +380,15 @@ white:true*/
       // GRAB THE PROJECT MODULE
       require(_path.join(X.basePath, "../../client/source/ext/project", "core.js"));
       enyo.relativePath = _path.join(X.basePath, "../../client/source/ext/project/models");
-      require(_path.join(X.basePath, "../../client/source/ext/project/models", "package.js"));
+      require(_path.join(X.basePath, "../../client/source/ext/project/models", "package.js")); 
+      // GRAB THE CONNECT MODULE
+      require(_path.join(X.basePath, "../../client/source/ext/connect", "core.js"));
+      enyo.relativePath = _path.join(X.basePath, "../../client/source/ext/connect/models");
+      require(_path.join(X.basePath, "../../client/source/ext/connect/models", "package.js"));
+      // GRAB THE INCIDENT PLUS MODULE
+      require(_path.join(X.basePath, "../../client/source/ext/incident_plus", "core.js"));
+      enyo.relativePath = _path.join(X.basePath, "../../client/source/ext/incident_plus/models");
+      require(_path.join(X.basePath, "../../client/source/ext/incident_plus/models", "package.js"));
       // GRAB THE STARTUP TASKS
       require(_path.join(X.basePath, "../source", "startup.js"));
  
