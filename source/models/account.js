@@ -254,6 +254,18 @@ white:true*/
 
     @extends XM.Model
   */
+  XM.AccountListItemCharacteristic = XM.Model.extend({
+    /** @scope XM.AccountListItemCharacteristic.prototype */
+
+    recordType: 'XM.AccountListItemCharacteristic'
+
+  });
+  
+  /**
+    @class
+
+    @extends XM.Model
+  */
   XM.AccountAddressListItem = XM.Model.extend({
     /** @scope XM.AccountAddressListItem.prototype */
 

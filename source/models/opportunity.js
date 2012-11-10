@@ -263,6 +263,18 @@ white:true*/
     editableModel: 'XM.Opportunity'
 
   });
+  
+  /**
+    @class
+
+    @extends XM.Model
+  */
+  XM.OpportunityListItemCharacteristic = XM.Model.extend({
+    /** @scope XM.OpportunityListItemCharacteristic.prototype */
+
+    recordType: 'XM.OpportunityListItemCharacteristic'
+
+  });
 
   // ..........................................................
   // COLLECTIONS
