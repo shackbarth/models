@@ -87,7 +87,7 @@ white:true*/
       this.on('change:startDate change:completeDate', this.toDoStatusDidChange);
       this.on('change:status', this.toDoDidChange);
       this.on('changeStatus', this.toDoDidChange);
-      
+
       // Bind document assignments
       this.bindDocuments();
     },
@@ -143,7 +143,7 @@ white:true*/
     }
 
   });
-  
+
   XM.ToDo = XM.ToDo.extend(XM.DocumentAssignmentsMixin);
 
   // To-Do status mixin
@@ -236,7 +236,7 @@ white:true*/
     /** @scope XM.ToDoComment.prototype */
 
     recordType: 'XM.ToDoComment',
-    
+
     sourceName: 'TD'
 
   });
@@ -288,20 +288,6 @@ white:true*/
 
     @extends XM.Model
   */
-  XM.ToDoImage = XM.Model.extend({
-    /** @scope XM.ToDoImage.prototype */
-
-    recordType: 'XM.ToDoImage',
-
-    isDocumentAssignment: true
-
-  });
-
-  /**
-    @class
-
-    @extends XM.Model
-  */
   XM.ToDoToDo = XM.Model.extend({
     /** @scope XM.ToDoToDo.prototype */
 
@@ -334,9 +320,9 @@ white:true*/
     /** @scope XM.ToDoRelation.prototype */
 
     recordType: 'XM.ToDoRelation',
-    
+
     editableModel: 'XM.ToDo',
-    
+
     numberKey: 'name'
 
   });
@@ -350,7 +336,7 @@ white:true*/
     /** @scope XM.ToDoListItem.prototype */
 
     recordType: 'XM.ToDoListItem',
-    
+
     editableModel: 'XM.ToDo'
 
   });

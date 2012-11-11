@@ -314,7 +314,7 @@ white:true*/
     /** @scope XM.ProjectTask.prototype */
 
     recordType: 'XM.ProjectTask',
-    
+
     enforceUpperKey: false,
 
     defaults: function () {
@@ -434,20 +434,6 @@ white:true*/
     /** @scope XM.ProjectFile.prototype */
 
     recordType: 'XM.ProjectFile',
-
-    isDocumentAssignment: true
-
-  });
-
-  /**
-    @class
-
-    @extends XM.Model
-  */
-  XM.ProjectImage = XM.Model.extend({
-    /** @scope XM.ProjectImage.prototype */
-
-    recordType: 'XM.ProjectImage',
 
     isDocumentAssignment: true
 
