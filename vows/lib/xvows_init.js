@@ -298,26 +298,25 @@ white:true*/
       // INCLUDE ALL THE NECESSARY XT FRAMEWORK
       // DEPENDENCIES
       DOCUMENT_HOSTNAME = "";
-      [
-        "foundation",
-        "error",
-        "log",
-        "datasource",
-        "math",
-        "request",
-        "response",
-        "session",
-        "locale",
-        "ext/proto/string",
-        "ext/string",
-        "ext/startup_task"
-      ].map(function (path) {
-        "use strict";
-        return _path.join(X.basePath, "lib/tools/source", path) + ".js";
-      }).forEach(function (path) {
-        "use strict";
-        require(path);
-      });
+
+      // this will move into node-xt soon
+      X.relativeDependsPath = "";
+      X.depends = function () {
+        var root = this.relativeDependsPath,
+          files = X.$A(arguments);
+
+        console.log("Root: " + root);
+        _.each(files, function (file) {
+          require(_path.join(root, file));
+        });
+      };
+      // end node-xt-bound code (note: fix the path problem first. Also, this code
+      // does not appear to be able to recurse into subdirectories, which it should)
+
+      // unfortunately we need to set the path here, which is a problem we'll want
+      // to resolve before we enshrine this in node-xt
+      X.relativeDependsPath = _path.join(X.basePath, "node_modules/tools/source");
+      require("tools");
 
       XT.app = {show: X.$P};
 
@@ -364,18 +363,6 @@ white:true*/
       // still necessary for cookie management in tools
       require("./enyo_placeholder");
 
-      // this will move into node-xt soon
-      X.relativeDependsPath = "";
-      X.depends = function () {
-        var root = this.relativeDependsPath,
-          files = X.$A(arguments);
-
-        console.log("Root: " + root);
-        _.each(files, function (file) {
-          require(_path.join(root, file));
-        });
-      };
-      // end node-xt-bound code (see next three lines of comments)
 
       // unfortunately we need to set the path here, which is a problem we'll want
       // to resolve before we enshrine this in node-xt

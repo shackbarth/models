@@ -1,6 +1,3 @@
 [submodule "vows/lib/node-schemas"]
 	path = vows/lib/node-schemas
 	url = git://github.com/xtuple/node-schemas.git
-[submodule "vows/lib/tools"]
-	path = vows/lib/tools
-	url = https://github.com/xtuple/tools

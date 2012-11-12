@@ -14,6 +14,7 @@
     "socket.io-client":"0.9.6",
     "tinycolor":"0.0.1",
     "commander":"1.0.4",
+    "tools": "git://github.com/xtuple/tools.git#master",
     "backbone-x": "git://github.com/xtuple/backbone-x.git#master",
     "xt": "git://github.com/xtuple/node-xt.git#master"
   },
