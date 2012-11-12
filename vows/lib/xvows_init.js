@@ -370,15 +370,17 @@ white:true*/
         var root = this.relativeDependsPath,
           files = X.$A(arguments);
 
+        console.log("Root: " + root);
         _.each(files, function (file) {
           require(_path.join(root, file));
         });
       };
-      // end node-xt-bound code
+      // end node-xt-bound code (see next three lines of comments)
 
+      // unfortunately we need to set the path here, which is a problem we'll want
+      // to resolve before we enshrine this in node-xt
+      X.relativeDependsPath = _path.join(X.basePath, "node_modules/backbone-x/source");
       require("backbone-x");
-      //X.relativeDependsPath = _path.join(X.basePath, "node_modules/backbone-x/source");
-      //require(_path.join(X.basePath, "node_modules/backbone-x/source/package.js"));
 
       // GRAB THE LOAD ORDER WE WANT TO PRESERVE
       // FROM THE package.js FILE IN MODELS
