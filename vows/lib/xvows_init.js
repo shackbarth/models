@@ -1,4 +1,4 @@
-/*jshint indent:2, curly:true eqeqeq:true, immed:true, latedef:true, 
+/*jshint indent:2, curly:true eqeqeq:true, immed:true, latedef:true,
 newcap:true, noarg:true, regexp:true, undef:true, strict:true, trailing:true
 white:true*/
 /*global XT:true, _:true, console:true, X:true, Backbone:true, require:true */
@@ -50,7 +50,7 @@ white:true*/
   }());
 
   var sessionCache, userCache, K, sid, k, user, username, organization, details, tmp;
-  
+
   // COPIED FROM app.js in client application
   var UNINITIALIZED = 0;
   var LOADING_SESSION = 1;
@@ -74,7 +74,7 @@ white:true*/
       "use strict";
 
       var path = _path.join(X.basePath, "tests"), files, hash = {};
-      _.each(X.directoryFiles(path, {fullPath: true, extension: ".js"}), function(file) {
+      _.each(X.directoryFiles(path, {fullPath: true, extension: ".js"}), function (file) {
         hash[_path.basename(file)] = file;
       });
       this.set("tests", hash);
@@ -85,7 +85,7 @@ white:true*/
         that = this,
         cnt = 0,
         len = 0;
-        
+
       // This whole startup thing is terrible....
       if (currentState === LOADING_SESSION) {
         // Treating this like other progressive actions because we assume
@@ -124,10 +124,10 @@ white:true*/
         len = XT.StartupTasks.length;
         _.each(XT.StartupTasks, function (task) {
           XT.StartupTask.create(task);
-        }); 
-        XT.getStartupManager().registerCallback(function () { 
+        });
+        XT.getStartupManager().registerCallback(function () {
           cnt++;
-          if (cnt >= len) { that.begin(); } 
+          if (cnt >= len) { that.begin(); }
         }, true);
       } else {
         this.console("all startup tasks completed");
@@ -355,49 +355,62 @@ white:true*/
       // INCLUDE ALL THE NECESSARY XM FRAMEWORK
       // DEPENDENCIES
       //
-     
+
       // LOAD ALL MODELS
       //
       // TO PRESERVE LOAD ORDER WE HACK THIS INTO
       // UGLY OBLIVION BUT BY GOLLY IT F*@&$@# WORKS
+      // trying to deprecate this, but it is
+      // still necessary for cookie management in tools
       require("./enyo_placeholder");
 
-      enyo.relativePath = _path.join(X.basePath, "lib/backbone-x/source");
-      require(_path.join(X.basePath, "lib/backbone-x/source/package.js"));
-      require(_path.join(X.basePath, "lib/backbone-x/source", "core.js"));
-      require(_path.join(X.basePath, "lib/backbone-x/source", "model.js"));
-      require(_path.join(X.basePath, "lib/backbone-x/source", "collection.js"));
+      // this will move into node-xt soon
+      X.relativeDependsPath = "";
+      X.depends = function () {
+        var root = this.relativeDependsPath,
+          files = X.$A(arguments);
+
+        _.each(files, function (file) {
+          require(_path.join(root, file));
+        });
+      };
+      // end node-xt-bound code
+
+      //require("backbone-x");
+      X.relativeDependsPath = _path.join(X.basePath, "node_modules/backbone-x/source");
+      require(_path.join(X.basePath, "node_modules/backbone-x/source/package.js"));
+
       // GRAB THE LOAD ORDER WE WANT TO PRESERVE
       // FROM THE package.js FILE IN MODELS
-      enyo.relativePath = _path.join(X.basePath, "../source/models");
+      X.relativeDependsPath = _path.join(X.basePath, "../source/models");
       require(_path.join(X.basePath, "../source/models", "package.js"));
       require(_path.join(X.basePath, "../source/ext", "core.js"));
       require(_path.join(X.basePath, "../source/ext", "session.js"));
       // GRAB THE CRM MODULE
       require(_path.join(X.basePath, "../../client/source/ext/crm", "core.js"));
-      enyo.relativePath = _path.join(X.basePath, "../../client/source/ext/crm/models");
+      X.relativeDependsPath = _path.join(X.basePath, "../../client/source/ext/crm/models");
       require(_path.join(X.basePath, "../../client/source/ext/crm/models", "package.js"));
       // GRAB THE PROJECT MODULE
       require(_path.join(X.basePath, "../../client/source/ext/project", "core.js"));
-      enyo.relativePath = _path.join(X.basePath, "../../client/source/ext/project/models");
-      require(_path.join(X.basePath, "../../client/source/ext/project/models", "package.js")); 
+      X.relativeDependsPath = _path.join(X.basePath, "../../client/source/ext/project/models");
+      require(_path.join(X.basePath, "../../client/source/ext/project/models", "package.js"));
       // GRAB THE CONNECT MODULE
       require(_path.join(X.basePath, "../../client/source/ext/connect", "core.js"));
-      enyo.relativePath = _path.join(X.basePath, "../../client/source/ext/connect/models");
+      X.relativeDependsPath = _path.join(X.basePath, "../../client/source/ext/connect/models");
       require(_path.join(X.basePath, "../../client/source/ext/connect/models", "package.js"));
       // GRAB THE INCIDENT PLUS MODULE
       require(_path.join(X.basePath, "../../client/source/ext/incident_plus", "core.js"));
-      enyo.relativePath = _path.join(X.basePath, "../../client/source/ext/incident_plus/models");
+      X.relativeDependsPath = _path.join(X.basePath, "../../client/source/ext/incident_plus/models");
       require(_path.join(X.basePath, "../../client/source/ext/incident_plus/models", "package.js"));
       // GRAB THE STARTUP TASKS
       require(_path.join(X.basePath, "../source", "startup.js"));
- 
+
       // HANEOUS ABOMINATION TO KEEP BACKBONE-
       // RELATIONAL FROM BOMBING...
-      Backbone.XM = XM; 
-      
+      Backbone.XM = XM;
+
       require(_path.join(X.basePath, "lib/crud.js"));
-      
+
       // PROCESS ANY INCOMING ARGS REAL QUICK
       (function () {
         "use strict";

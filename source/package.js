@@ -1,4 +1,4 @@
-enyo.depends(
+X.depends(
   "en",
   "ext",
   "models",
