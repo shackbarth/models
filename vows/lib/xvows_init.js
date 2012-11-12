@@ -376,9 +376,9 @@ white:true*/
       };
       // end node-xt-bound code
 
-      //require("backbone-x");
-      X.relativeDependsPath = _path.join(X.basePath, "node_modules/backbone-x/source");
-      require(_path.join(X.basePath, "node_modules/backbone-x/source/package.js"));
+      require("backbone-x");
+      //X.relativeDependsPath = _path.join(X.basePath, "node_modules/backbone-x/source");
+      //require(_path.join(X.basePath, "node_modules/backbone-x/source/package.js"));
 
       // GRAB THE LOAD ORDER WE WANT TO PRESERVE
       // FROM THE package.js FILE IN MODELS
