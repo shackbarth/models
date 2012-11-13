@@ -376,20 +376,6 @@ white:true*/
 
     @extends XM.Model
   */
-  XM.IncidentImage = XM.Model.extend({
-    /** @scope XM.IncidentImage.prototype */
-
-    recordType: 'XM.IncidentImage',
-
-    isDocumentAssignment: true
-
-  });
-
-  /**
-    @class
-
-    @extends XM.Model
-  */
   XM.IncidentUrl = XM.Model.extend({
     /** @scope XM.IncidentUrl.prototype */
 

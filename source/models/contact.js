@@ -186,20 +186,6 @@ white:true*/
 
     @extends XM.Model
   */
-  XM.ContactImage = XM.Model.extend({
-    /** @scope XM.ContactImage.prototype */
-
-    recordType: 'XM.ContactImage',
-
-    isDocumentAssignment: true
-
-  });
-
-  /**
-    @class
-
-    @extends XM.Model
-  */
   XM.ContactUrl = XM.Model.extend({
     /** @scope XM.ContactUrl.prototype */
 

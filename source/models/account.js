@@ -182,20 +182,6 @@ white:true*/
 
     @extends XM.Model
   */
-  XM.AccountImage = XM.Model.extend({
-    /** @scope XM.AccountImage.prototype */
-
-    recordType: 'XM.AccountImage',
-
-    isDocumentAssignment: true
-
-  });
-
-  /**
-    @class
-
-    @extends XM.Model
-  */
   XM.AccountUrl = XM.Model.extend({
     /** @scope XM.AccountUrl.prototype */
 
@@ -248,7 +234,7 @@ white:true*/
     editableModel: 'XM.Account'
 
   });
-  
+
   /**
     @class
 
@@ -276,7 +262,7 @@ white:true*/
   // ..........................................................
   // COLLECTIONS
   //
-  
+
   /**
     @class
 

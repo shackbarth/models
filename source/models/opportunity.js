@@ -119,7 +119,7 @@ white:true*/
     /** @scope XM.OpportunityComment.prototype */
 
     recordType: 'XM.OpportunityComment',
-    
+
     sourceName: 'OPP'
 
   });
@@ -187,20 +187,6 @@ white:true*/
     /** @scope XM.OpportunityFile.prototype */
 
     recordType: 'XM.OpportunityFile',
-
-    isDocumentAssignment: true
-
-  });
-
-  /**
-    @class
-
-    @extends XM.Model
-  */
-  XM.OpportunityImage = XM.Model.extend({
-    /** @scope XM.OpportunityImage.prototype */
-
-    recordType: 'XM.OpportunityImage',
 
     isDocumentAssignment: true
 
@@ -327,7 +313,7 @@ white:true*/
     model: XM.OpportunityListItem
 
   });
-  
+
   /**
     @class
 

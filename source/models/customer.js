@@ -114,20 +114,6 @@ white:true*/
 
     @extends XM.Model
   */
-  XM.CustomerImage = XM.Model.extend({
-    /** @scope XM.CustomerImage.prototype */
-
-    recordType: 'XM.CustomerImage',
-
-    isDocumentAssignment: true
-
-  });
-
-  /**
-    @class
-
-    @extends XM.Model
-  */
   XM.CustomerUrl = XM.Model.extend({
     /** @scope XM.CustomerUrl.prototype */
 
@@ -136,7 +122,7 @@ white:true*/
     isDocumentAssignment: true
 
   });
-  
+
   /**
     @class
 
@@ -148,7 +134,7 @@ white:true*/
     recordType: 'XM.CustomerShipto'
 
   });
-  
+
   /**
     @class
 
@@ -158,7 +144,7 @@ white:true*/
     /** @scope XM.CustomerType.prototype */
 
     recordType: 'XM.CustomerType',
-    
+
     documentKey: 'code'
 
   });
@@ -178,7 +164,7 @@ white:true*/
     descriptionKey: "name"
 
   });
-  
+
   /**
     @class
 
@@ -188,11 +174,11 @@ white:true*/
     /** @scope XM.CustomerCharge.prototype */
 
     recordType: 'XM.ShipCharge',
-    
+
     documentKey: 'name'
 
   });
-  
+
   /**
     @class
 
@@ -202,11 +188,11 @@ white:true*/
     /** @scope XM.CustomerVia.prototype */
 
     recordType: 'XM.ShipVia',
-    
+
     documentKey: 'code'
 
   });
-  
+
   /**
     @class
 
@@ -216,7 +202,7 @@ white:true*/
     /** @scope XM.ShipZone.prototype */
 
     recordType: 'XM.ShipZone',
-    
+
     documentKey: 'name'
 
   });

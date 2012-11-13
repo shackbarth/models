@@ -250,20 +250,6 @@ white:true*/
 
     @extends XM.Model
   */
-  XM.ItemImage = XM.Model.extend({
-    /** @scope XM.ItemImage.prototype */
-
-    recordType: 'XM.ItemImage',
-
-    isDocumentAssignment: true
-
-  });
-
-  /**
-    @class
-
-    @extends XM.Model
-  */
   XM.ItemUrl = XM.Model.extend({
     /** @scope XM.ItemUrl.prototype */
 
@@ -284,7 +270,7 @@ white:true*/
     recordType: 'XM.ItemRelation',
 
     editableModel: 'XM.Item',
-    
+
     descriptionKey: 'description1'
 
   });
@@ -340,7 +326,7 @@ white:true*/
     model: XM.ItemListItem
 
   });
-  
+
   /**
     @class
 
