@@ -226,6 +226,18 @@ white:true*/
     editableModel: 'XM.Contact'
 
   });
+  
+  /**
+    @class
+
+    @extends XM.Model
+  */
+  XM.ContactListItemCharacteristic = XM.Model.extend({
+    /** @scope XM.ContactistItemCharacteristic.prototype */
+
+    recordType: 'XM.ContactListItemCharacteristic'
+
+  });
 
   // ..........................................................
   // METHODS

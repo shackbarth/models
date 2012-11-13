@@ -441,6 +441,18 @@ white:true*/
     editableModel: 'XM.Incident'
 
   });
+  
+  /**
+    @class
+
+    @extends XM.Model
+  */
+  XM.IncidentListItemCharacteristic = XM.Model.extend({
+    /** @scope XM.IncidentListItemCharacteristic.prototype */
+
+    recordType: 'XM.IncidentListItemCharacteristic'
+
+  });
 
   // Incident status mixin
   XM.IncidentListItem = XM.IncidentListItem.extend(XM.IncidentStatus);
