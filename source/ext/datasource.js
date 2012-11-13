@@ -186,7 +186,6 @@ white:true*/
     @param {Function} success callback
     @param {Function} error callback
     */
-    /** @private */
     dispatch: function (name, func, params, options) {
       var that = this,
         payload = {
@@ -230,7 +229,6 @@ white:true*/
     @param {Function} success callback
     @param {Function} error callback
     */
-    /** @private */
     configure: function (func, params, options) {
       var that = this,
         payload = {
@@ -364,7 +362,7 @@ white:true*/
     }
 
   };
-  
+
   XT.dataSource = Object.create(XT.DataSource);
 
 }());
